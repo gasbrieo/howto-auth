@@ -9,6 +9,7 @@ builder.Services.AddControllersConfigs();
 builder.Services.AddServiceConfigs(builder.Configuration);
 builder.Services.AddSwaggerConfigs();
 builder.Services.AddIdentityConfigs(builder.Configuration);
+builder.Services.AddCorsConfigs();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var app = builder.Build();
@@ -19,6 +20,7 @@ app.MapControllers();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerConfigs();
+    app.UseCorsConfigs();
 }
 
 app.UseExceptionHandler(_ => { });
