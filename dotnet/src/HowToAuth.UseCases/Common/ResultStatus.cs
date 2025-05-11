@@ -6,6 +6,5 @@ public enum ResultStatus
     Created,
     NoContent,
     Error,
-    Invalid,
     NotFound
 }

@@ -17,12 +17,7 @@ public class RegisterUserUseCase(IUserRepository userRepository, ITokenService t
         var result = await userRepository.CreateAsync(user, request.Password);
 
         if (!result.Succeeded)
-            return Result.Invalid(result.Errors
-                .GroupBy(e => e.Code)
-                .ToDictionary(
-                    g => g.Key,
-                    g => g.Select(e => e.Description).ToList()
-                ));
+            return Result.Error([.. result.Errors.Select(e => e.Description)]);
 
         var token = tokenService.GenerateToken(user);
 

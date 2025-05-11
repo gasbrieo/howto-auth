@@ -8,9 +8,7 @@ public class Result<TValue> : IResult
 
     public bool IsSuccess => Status is ResultStatus.Ok;
 
-    public string Title { get; protected set; } = string.Empty;
-
-    public Dictionary<string, List<string>> Errors { get; protected set; } = [];
+    public IEnumerable<string> Errors { get; protected set; } = [];
 
     public string Location { get; protected set; } = string.Empty;
 
@@ -32,12 +30,7 @@ public class Result<TValue> : IResult
 
     public static Result<TValue> NoContent() => new(ResultStatus.NoContent);
 
-    public static Result<TValue> Error(string title) => new(ResultStatus.Error)
-    {
-        Title = title
-    };
-
-    public static Result<TValue> Invalid(Dictionary<string, List<string>> errors) => new(ResultStatus.Invalid)
+    public static Result<TValue> Error(params string[] errors) => new(ResultStatus.Error)
     {
         Errors = errors
     };
@@ -49,7 +42,6 @@ public class Result<TValue> : IResult
     public static implicit operator Result<TValue>(Result result) => new(default(TValue))
     {
         Status = result.Status,
-        Title = result.Title,
         Errors = result.Errors,
     };
 }

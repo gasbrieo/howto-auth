@@ -16,32 +16,21 @@ public abstract class BaseController : ControllerBase
             ResultStatus.Created => Created(result.Location, result.GetValue()),
             ResultStatus.NoContent => NoContent(),
             ResultStatus.NotFound => NotFound(),
-            ResultStatus.Error => Problem(result.Title),
-            ResultStatus.Invalid => ValidationProblem(result.Errors, result.Title),
+            ResultStatus.Error => Problem(result.Errors),
             _ => throw new NotSupportedException($"Result {result.Status} conversion is not supported."),
         };
     }
 
-    protected BadRequestObjectResult Problem(string title)
+    protected BadRequestObjectResult Problem(IEnumerable<string> errors)
     {
-        return new BadRequestObjectResult(new ProblemDetails
+        var problemDetails = new ProblemDetails
         {
-            Title = title,
+            Title = "One or more validation errors occurred.",
             Status = StatusCodes.Status400BadRequest
-        });
-    }
+        };
 
-    protected BadRequestObjectResult ValidationProblem(Dictionary<string, List<string>> errors, string? title = null)
-    {
-        var formatted = errors.ToDictionary(
-            kvp => kvp.Key,
-            kvp => kvp.Value.ToArray()
-        );
+        problemDetails.Extensions.Add("errors", errors.ToArray());
 
-        return new BadRequestObjectResult(new ValidationProblemDetails(formatted)
-        {
-            Title = title ?? "One or more validation errors occurred.",
-            Status = StatusCodes.Status400BadRequest
-        });
+        return new BadRequestObjectResult(problemDetails);
     }
 }

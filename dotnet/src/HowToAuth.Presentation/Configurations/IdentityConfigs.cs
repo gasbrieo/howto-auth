@@ -1,6 +1,5 @@
 ﻿using HowToAuth.Core.Entities;
 using HowToAuth.Infrastructure.Data;
-using HowToAuth.Infrastructure.Identity;
 
 namespace HowToAuth.Presentation.Configurations;
 
@@ -12,7 +11,6 @@ public static class IdentityConfigs
             .AddIdentityCore<ApplicationUser>()
             .AddRoles<ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddErrorDescriber<CustomIdentityErrorDescriber>()
             .AddDefaultTokenProviders();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -12,12 +12,7 @@ public class Result : Result<Result>
 
     public new static Result NoContent() => new(ResultStatus.NoContent);
 
-    public new static Result Error(string title) => new(ResultStatus.Error)
-    {
-        Title = title
-    };
-
-    public new static Result Invalid(Dictionary<string, List<string>> errors) => new(ResultStatus.Invalid)
+    public new static Result Error(params string[] errors) => new(ResultStatus.Error)
     {
         Errors = errors
     };
